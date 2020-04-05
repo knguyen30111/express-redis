@@ -1,19 +1,20 @@
 import { Router } from 'express'
-import { registerSchema } from '../validation'
+import { validate, registerSchema } from '../validation'
 import { User } from '../models'
 import { logIn } from '../auth'
-import { guest } from '../middleware'
+import { guest, catchAsync } from '../middleware'
+import { BadRequest } from '../errors'
 
 const router = Router()
 
-router.post('/register', guest, async (req, res) => {
-  await registerSchema.validateAsync(req.body, { abortEarly: false } )
+router.post('/register', guest, catchAsync(async (req, res) => {
+  await validate(registerSchema, req.body)
 
   const { email, name, password } = req.body
 
   const found= await User.exists({ email })
 
-  if(found) throw new Error('Invalid email')
+  if(found) throw new BadRequest('Invalid email')
 
   const user = await User.create({
     email, name, password
@@ -22,6 +23,6 @@ router.post('/register', guest, async (req, res) => {
   logIn(req, user.id)
 
   res.json({ message: 'OK' })
-})
+}))
 
 export default router
