@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose'
 import { hash } from "bcryptjs";
-import { BCRYIPT_WORK_FACTOR } from '../config';
+import { BCRYPT_WORK_FACTOR } from '../config';
 
 interface UserDocument extends Document {
   email: string
@@ -18,7 +18,7 @@ const userSchema = new Schema({
 
 userSchema.pre<UserDocument>('save', async function () {
   if(this.isModified('password')) {
-    this.password = await hash(this.password, BCRYIPT_WORK_FACTOR)    
+    this.password = await hash(this.password, BCRYPT_WORK_FACTOR)    
   }
 })
 
