@@ -1,0 +1,16 @@
+{
+  "name": "express-auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "up": "mkdir -p data && docker-compose up -d",
+    "postup":"yarn dev",
+    "stop": "docker-compose stop",
+    "down": "docker-compose down",
+    "dev": "yarn --cwd ./api dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
